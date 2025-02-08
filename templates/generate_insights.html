@@ -1,0 +1,568 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Insights - {{ session.name }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    .modal-content {
+        white-space: pre-wrap;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        background-color: white;
+        color: #24292f;
+    }
+    .modal-content pre {
+        background-color: #2d2d2d;
+        border-radius: 6px;
+        padding: 16px;
+        overflow-x: auto;
+    }
+    .modal-content code {
+        font-family: ui-monospace, monospace;
+        background-color: rgba(175, 184, 193, 0.2);
+        padding: 0.2em 0.4em;
+        border-radius: 6px;
+        font-size: 85%;
+        color: #24292f;
+    }
+    .modal-content pre code {
+        background-color: transparent;
+        padding: 0;
+        color: inherit;
+    }
+    .modal-content h1, .modal-content h2, .modal-content h3,
+    .modal-content h4, .modal-content h5, .modal-content h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+        color: #24292f;
+    }
+    .modal-content p {
+        margin-bottom: 16px;
+        color: #24292f;
+    }
+    .modal-content ul, .modal-content ol {
+        padding-left: 2em;
+        margin-bottom: 16px;
+        color: #24292f;
+    }
+    .modal-content li {
+        color: #24292f;
+    }
+    .modal-content blockquote {
+        color: #57606a;
+        border-left: 0.25em solid #d0d7de;
+        padding-left: 1em;
+        margin: 1em 0;
+    }
+    .modal-content a {
+        color: #0969da;
+    }
+    .modal-content table {
+        color: #24292f;
+        border-collapse: collapse;
+        margin: 1em 0;
+        width: 100%;
+    }
+    .modal-content table th,
+    .modal-content table td {
+        border: 1px solid #d0d7de;
+        padding: 6px 13px;
+    }
+    .modal-content table tr:nth-child(2n) {
+        background-color: #f6f8fa;
+    }
+    /* Override Prism styles for code blocks */
+    .modal-content .token {
+        color: inherit;
+    }
+    pre[class*="language-"] {
+        background: #2d2d2d;
+        color: #ccc;
+    }
+    pre[class*="language-"] code {
+        color: inherit;
+    }
+    body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+        background: #f8f9fa;
+    }
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e1e4e8;
+    }
+    @media (max-width: 767px) {
+        body { padding: 15px; }
+    }
+    .markdown-body {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+        color: #24292f;
+        background-color: white;
+    }
+    :not(pre) > code {
+        background: rgba(175,184,193,0.2);
+        padding: 0.2em 0.4em;
+        border-radius: 6px;
+        font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+        color: #24292f;
+    }
+    /* Override any dark theme styles from github-markdown-css */
+    .markdown-body {
+        color-scheme: light;
+    }
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3,
+    .markdown-body h4,
+    .markdown-body h5,
+    .markdown-body h6 {
+        color: #24292f;
+    }
+    .markdown-body p,
+    .markdown-body li,
+    .markdown-body table {
+        color: #24292f;
+    }
+    .markdown-body a {
+        color: #0969da;
+    }
+    .markdown-body blockquote {
+        color: #57606a;
+        border-left: 0.25em solid #d0d7de;
+    }
+    /* Override GitHub markdown dark theme */
+    .markdown-body {
+        color: #24292f !important;
+        background-color: white !important;
+    }
+    .markdown-body * {
+        color: #24292f !important;
+        background-color: transparent !important;
+    }
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3,
+    .markdown-body h4,
+    .markdown-body h5,
+    .markdown-body h6,
+    .markdown-body p,
+    .markdown-body li,
+    .markdown-body ul,
+    .markdown-body ol,
+    .markdown-body blockquote,
+    .markdown-body table,
+    .markdown-body tr,
+    .markdown-body td,
+    .markdown-body th {
+        color: #24292f !important;
+        background-color: transparent !important;
+    }
+    /* Code blocks styling */
+    .markdown-body pre[class*="language-"] {
+        background-color: #f6f8fa !important;
+        border-radius: 6px;
+        padding: 16px;
+        overflow-x: auto;
+    }
+    .markdown-body pre[class*="language-"] code {
+        color: #24292f !important;
+        background-color: transparent !important;
+    }
+    .markdown-body code {
+        background-color: rgba(175, 184, 193, 0.2) !important;
+        padding: 0.2em 0.4em;
+        border-radius: 6px;
+        font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    }
+    .markdown-body pre code {
+        background-color: transparent !important;
+        padding: 0;
+    }
+    /* Links */
+    .markdown-body a {
+        color: #0969da !important;
+    }
+    /* Blockquotes */
+    .markdown-body blockquote {
+        color: #57606a !important;
+        border-left: 0.25em solid #d0d7de;
+        padding-left: 1em;
+    }
+    /* Tables */
+    .markdown-body table tr {
+        background-color: white !important;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: #f6f8fa !important;
+    }
+    /* Force light theme */
+    [data-theme="dark"] .markdown-body,
+    [data-color-mode="dark"] .markdown-body {
+        color-scheme: light !important;
+        --color-canvas-default: white !important;
+        --color-canvas-subtle: #f6f8fa !important;
+        --color-border-default: #d0d7de !important;
+        --color-border-muted: #d8dee4 !important;
+        --color-neutral-muted: rgba(175,184,193,0.2) !important;
+        --color-accent-fg: #0969da !important;
+        --color-fg-default: #24292f !important;
+        --color-fg-muted: #57606a !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">Generate Insights</h1>
+            <p class="text-gray-600">Session: {{ session.name }}</p>
+        </div>
+
+        <!-- Generation Form -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <form method="POST" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Agent</label>
+                        <select name="agent_id" class="form-select w-full" required>
+                            <option value="">Choose an agent...</option>
+                            {% for agent in agents %}
+                            <option value="{{ agent.id }}">{{ agent.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select LLM</label>
+                        <select name="llm" class="form-select w-full" required>
+                            <option value="">Choose a model...</option>
+                            {% for llm in available_llms %}
+                            <option value="{{ llm }}">{{ llm }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fas fa-magic me-2"></i>
+                    <span>Generate Insights</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Previous Responses -->
+        {% if agent_responses %}
+        <div class="space-y-8">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-semibold text-gray-800">Previous Responses</h3>
+                <div class="flex gap-2">
+                    <button id="groupByAgent" class="btn btn-secondary btn-sm active">
+                        <i class="fas fa-user-tie me-2"></i>Group by Agent
+                    </button>
+                    <button id="groupByLLM" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-microchip me-2"></i>Group by LLM
+                    </button>
+                </div>
+            </div>
+
+            <!-- Responses grouped by Agent -->
+            <div id="agentGrouped" class="space-y-8">
+                {% for agent in agents %}
+                {% set agent_resps = agent_responses|selectattr('agent_id', 'equalto', agent.id)|list|sort(attribute='created_at', reverse=true) %}
+                {% if agent_resps %}
+                <div class="space-y-4">
+                    <h4 class="text-lg font-medium text-blue-600">
+                        <i class="fas fa-user-tie me-2"></i>{{ agent.name }}
+                        <span class="text-sm text-gray-500">({{ agent_resps|length }} responses)</span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for response in agent_resps %}
+                        <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <i class="fas fa-microchip me-1"></i>{{ response.llm_used }}
+                                    </span>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ response.created_at.strftime('%B %d, %Y at %H:%M') }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <button type="button" 
+                                        class="btn btn-primary btn-sm flex-1 view-response" 
+                                        data-content="{{ response.content }}"
+                                        data-agent="{{ agent.name }}"
+                                        data-llm="{{ response.llm_used }}"
+                                        data-date="{{ response.created_at.strftime('%B %d, %Y at %H:%M') }}">
+                                    <i class="fas fa-eye me-2"></i>
+                                    View Response
+                                </button>
+                                <button type="button"
+                                        class="btn btn-secondary btn-sm copy-response" 
+                                        data-content="{{ response.content }}">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Responses grouped by LLM -->
+            <div id="llmGrouped" class="space-y-8 hidden">
+                {% for llm in available_llms %}
+                {% set llm_resps = agent_responses|selectattr('llm_used', 'equalto', llm)|list|sort(attribute='created_at', reverse=true) %}
+                {% if llm_resps %}
+                <div class="space-y-4">
+                    <h4 class="text-lg font-medium text-purple-600">
+                        <i class="fas fa-microchip me-2"></i>{{ llm }}
+                        <span class="text-sm text-gray-500">({{ llm_resps|length }} responses)</span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for response in llm_resps %}
+                        <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        <i class="fas fa-user-tie me-1"></i>{{ response.agent.name }}
+                                    </span>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ response.created_at.strftime('%B %d, %Y at %H:%M') }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <button type="button"
+                                        class="btn btn-primary btn-sm flex-1 view-response" 
+                                        data-content="{{ response.content }}"
+                                        data-agent="{{ response.agent.name }}"
+                                        data-llm="{{ llm }}"
+                                        data-date="{{ response.created_at.strftime('%B %d, %Y at %H:%M') }}">
+                                    <i class="fas fa-eye me-2"></i>
+                                    View Response
+                                </button>
+                                <button type="button"
+                                        class="btn btn-secondary btn-sm copy-response" 
+                                        data-content="{{ response.content }}">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- View Response Modal -->
+<div id="viewModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl max-h-[90vh] overflow-hidden">
+        <div class="p-4 border-b flex justify-between items-center bg-white">
+            <div class="header">
+                <h3 class="text-lg font-semibold modal-title"></h3>
+                <p class="text-sm text-gray-500 modal-meta"></p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-600 close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto bg-white" style="max-height: calc(90vh - 80px);">
+            <div class="markdown-body modal-content"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // First ensure marked is loaded
+    if (typeof marked === 'undefined') {
+        console.error('Marked library not loaded, attempting to load it again');
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+        script.onload = function() {
+            console.log('Marked library loaded successfully');
+            initializeApp();
+        };
+        script.onerror = function() {
+            console.error('Failed to load marked library');
+        };
+        document.body.appendChild(script);
+    } else {
+        console.log('Marked library already loaded');
+        initializeApp();
+    }
+
+    function initializeApp() {
+        const groupByAgent = document.getElementById('groupByAgent');
+        const groupByLLM = document.getElementById('groupByLLM');
+        const agentGrouped = document.getElementById('agentGrouped');
+        const llmGrouped = document.getElementById('llmGrouped');
+        const modal = document.getElementById('viewModal');
+
+        // Initialize marked with options
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+
+        // Toggle grouping with active state management
+        if (groupByAgent && groupByLLM) {
+            groupByAgent.addEventListener('click', function() {
+                groupByAgent.classList.add('active', 'bg-blue-100', 'text-blue-800');
+                groupByLLM.classList.remove('active', 'bg-blue-100', 'text-blue-800');
+                agentGrouped.classList.remove('hidden');
+                llmGrouped.classList.add('hidden');
+            });
+
+            groupByLLM.addEventListener('click', function() {
+                groupByLLM.classList.add('active', 'bg-purple-100', 'text-purple-800');
+                groupByAgent.classList.remove('active', 'bg-purple-100', 'text-purple-800');
+                llmGrouped.classList.remove('hidden');
+                agentGrouped.classList.add('hidden');
+            });
+        }
+
+        // Add close functionality to modal
+        const closeModal = () => {
+            modal.classList.add('hidden');
+        };
+
+        modal.querySelector('.close-modal').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // View response functionality
+        document.querySelectorAll('.view-response').forEach(button => {
+            button.addEventListener('click', async function() {
+                try {
+                    const content = this.dataset.content;
+                    const agent = this.dataset.agent;
+                    const llm = this.dataset.llm;
+                    const date = this.dataset.date;
+
+                    // Process content to remove backticks and markdown formatting
+                    let processedContent = content;
+                    const lines = processedContent.split('\n');
+                    if (lines.length >= 2) {
+                        if (lines[0].trim() === '```markdown') {
+                            lines.shift();
+                        }
+                        if (lines[0].trim() === '```') {
+                            lines.shift();
+                        }
+                        if (lines[lines.length - 1].trim() === '```') {
+                            lines.pop();
+                        }
+                        if (lines[lines.length - 1].trim() === '`') {
+                            lines.pop();
+                        }
+                        processedContent = lines.join('\n');
+                    }
+
+                    // Load Prism.js and its dependencies
+                    await Promise.all([
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js'),
+                        loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js')
+                    ]);
+
+                    // Create the rendered markdown
+                    const renderedMarkdown = marked.parse(processedContent, {
+                        highlight: function(code, lang) {
+                            if (lang && Prism.languages[lang]) {
+                                return Prism.highlight(code, Prism.languages[lang], lang);
+                            }
+                            return code;
+                        }
+                    });
+
+                    // Update modal content
+                    modal.querySelector('.modal-title').textContent = `${agent} with ${llm}`;
+                    modal.querySelector('.modal-meta').textContent = `Generated on ${date}`;
+                    modal.querySelector('.modal-content').innerHTML = renderedMarkdown;
+
+                    // Show modal
+                    modal.classList.remove('hidden');
+
+                    // Re-run Prism highlighting
+                    Prism.highlightAll();
+
+                } catch (error) {
+                    console.error('Detailed error:', error);
+                    console.error('Error stack:', error.stack);
+                    alert('There was an error displaying the response. Please check the console for details.');
+                }
+            });
+        });
+
+        // Copy response functionality
+        document.querySelectorAll('.copy-response').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.dataset.content;
+                navigator.clipboard.writeText(content).then(() => {
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy text to clipboard');
+                });
+            });
+        });
+
+        // Helper function to load scripts
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+    }
+});
+</script>
+
+<!-- Add required CSS for markdown and code highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+{% endblock %} 

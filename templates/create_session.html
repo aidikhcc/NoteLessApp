@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Create Session{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-8 animate-fade-in">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <i class="fas fa-plus-circle text-4xl text-blue-600 mb-4"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-yellow-500 text-transparent bg-clip-text">Create New Session</h1>
+                <p class="text-gray-600 mt-2">Set up a new Q&A session</p>
+            </div>
+
+            <!-- Form -->
+            <form method="POST" action="{{ url_for('create_session') }}" class="space-y-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <div class="space-y-2">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Session Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-chalkboard text-gray-400"></i>
+                        </span>
+                        <input type="text" id="name" name="name" required
+                               class="form-control pl-10 w-full"
+                               placeholder="Enter a name for your session">
+                    </div>
+                    <p class="text-sm text-gray-500">
+                        This name will be visible to all participants
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                    <a href="{{ url_for('dashboard') }}" 
+                       class="btn btn-link text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button type="submit" 
+                            class="btn btn-primary flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        Create Session
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-8 bg-blue-50 rounded-xl p-6 animate-fade-in" style="animation-delay: 0.2s">
+            <h3 class="text-lg font-semibold text-blue-800 mb-4">
+                <i class="fas fa-lightbulb me-2"></i>
+                Tips for a Successful Session
+            </h3>
+            <ul class="space-y-3 text-blue-700">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 me-2"></i>
+                    <span>Choose a clear, descriptive name that participants can easily identify</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 me-2"></i>
+                    <span>You can add questions once the session is created</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 me-2"></i>
+                    <span>Share the access code with participants to let them join</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

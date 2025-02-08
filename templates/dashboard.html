@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="container-narrow">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Your Sessions</h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                <i class="fas fa-plus me-2"></i>
+                New Session
+            </button>
+        </div>
+
+        <!-- Session Grid -->
+        <div class="session-grid">
+            {% for session in sessions %}
+            <div class="session-card">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">{{ session.name }}</h3>
+                        <p class="text-sm text-gray-600">{{ session.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                    <div class="dropdown">
+                        <button class="p-1 hover:bg-white/30 rounded-full" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v text-gray-600"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('session_detail', session_id=session.id) }}">
+                                <i class="fas fa-eye me-2"></i> View Details
+                            </a></li>
+                            <li><button class="dropdown-item text-danger delete-session" data-session-id="{{ session.id }}">
+                                <i class="fas fa-trash-alt me-2"></i> Delete Session
+                            </button></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 mt-3 mb-4">
+                    <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-white/50 text-gray-700 rounded-full">
+                        {{ session.questions|length }} Questions
+                    </span>
+                    <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-white/50 text-gray-700 rounded-full">
+                        {{ session.access_code }}
+                    </span>
+                </div>
+
+                <div class="flex gap-2">
+                    <a href="{{ url_for('session_detail', session_id=session.id) }}" 
+                       class="btn btn-primary text-sm flex-1 flex items-center justify-center">
+                        <i class="fas fa-chevron-right mr-1"></i> Manage
+                    </a>
+                    <a href="{{ url_for('join_session', access_code=session.access_code) }}" 
+                       target="_blank"
+                       class="btn btn-secondary text-sm p-2"
+                       title="Open participant view">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-span-full text-center py-8">
+                <div class="bg-gray-50 rounded-lg p-6 inline-block">
+                    <i class="fas fa-clipboard-list text-3xl text-gray-400 mb-3"></i>
+                    <h3 class="text-lg font-medium text-gray-700 mb-2">No Sessions Yet</h3>
+                    <p class="text-sm text-gray-500 mb-3">Create your first Q&A session to get started</p>
+                    <a href="{{ url_for('create_session') }}" class="btn btn-primary text-sm">
+                        <i class="fas fa-plus me-2"></i> Create Session
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Create Session Modal -->
+<div class="modal fade" id="createSessionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('create_session') }}" method="POST" id="createSessionForm">
+                <div class="modal-body">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="sessionName" class="form-label">Session Name</label>
+                        <input type="text" class="form-control" id="sessionName" name="name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

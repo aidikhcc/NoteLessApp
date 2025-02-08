@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{{ session.name }}{% endblock %}
+
+{% block content %}
+<div class="session-detail">
+    <div class="container-narrow">
+        <div class="session-header">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">{{ session.name }}</h1>
+                    <p class="opacity-90">Created {{ session.created_at.strftime('%B %d, %Y') }}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
+                    <!-- Generate Button -->
+                    <form action="{{ url_for('generate_insights', session_id=session.id) }}" method="POST" class="w-full sm:w-auto">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-success w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 text-lg">
+                            <i class="fas fa-magic"></i>
+                            <span class="sm:inline">Generate</span>
+                        </button>
+                    </form>
+                    <!-- Session Access Button -->
+                    <button class="btn btn-primary w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 text-lg"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#accessModal">
+                        <i class="fas fa-key"></i>
+                        <span class="sm:inline">Session Access</span>
+                    </button>
+                    <button class="btn btn-link text-danger delete-session text-lg w-full sm:w-auto flex items-center justify-center" 
+                            data-session-id="{{ session.id }}">
+                        <i class="fas fa-trash-alt"></i>
+                        <span class="sm:inline ml-2">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Form -->
+        <form id="addQuestionForm" data-session-id="{{ session.id }}" class="mb-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="flex gap-3">
+                <div class="flex-1">
+                    <input type="text" id="questionText" 
+                           class="form-control"
+                           placeholder="Add a new question...">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Add Question
+                </button>
+            </div>
+        </form>
+
+        <!-- Questions List -->
+        <div class="question-list-container">
+            <div class="question-list">
+                {% for question in session.questions %}
+                <div class="question-item animate-slide-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <p class="text-gray-800 font-medium">{{ question.text }}</p>
+                            <div class="flex items-center gap-4 mt-2">
+                                <span class="text-sm text-gray-500">
+                                    <i class="fas fa-comment-alt me-1"></i>
+                                    {{ question.responses|length }} responses
+                                </span>
+                                <a href="{{ url_for('view_responses', question_id=question.id) }}" 
+                                   class="text-sm text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-eye me-1"></i>
+                                    View Responses
+                                </a>
+                            </div>
+                        </div>
+                        <button class="btn btn-link text-danger delete-question" 
+                                data-question-id="{{ question.id }}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-question-circle text-4xl mb-3"></i>
+                    <p>No questions added yet</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Modal -->
+    <div class="modal fade" id="accessModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-b py-2">
+                    <h5 class="modal-title text-lg font-semibold">Session Access</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="access-info py-2">
+                        <div class="mb-2">
+                            <i class="fas fa-key text-blue-500 text-xl"></i>
+                            <div class="access-code my-2">{{ session.access_code }}</div>
+                        </div>
+                        
+                        <div class="qr-container inline-block">
+                            <img src="data:image/png;base64,{{ qr_code }}" 
+                                 alt="Session QR Code" 
+                                 class="mx-auto w-100">
+                        </div>
+
+                        <p class="text-sm text-gray-600 mt-2">
+                            Share code or scan QR to join
+                        </p>
+                    </div>
+
+                    <div class="flex gap-2 mt-2">
+                        <button class="btn btn-primary flex-1 flex items-center justify-center gap-2 copy-link-btn"
+                                data-access-code="{{ session.access_code }}">
+                            <i class="fas fa-link"></i>
+                            Copy Link
+                        </button>
+                        
+                        <a href="{{ url_for('join_session', access_code=session.access_code) }}"
+                           target="_blank"
+                           class="btn btn-secondary flex-1 flex items-center justify-center gap-2">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

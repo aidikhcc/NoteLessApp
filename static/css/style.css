@@ -1,0 +1,850 @@
+:root {
+    --primary-blue: #2563eb;
+    --secondary-blue: #3b82f6;
+    --primary-yellow: #eab308;
+    --secondary-yellow: #facc15;
+}
+
+/* Refined Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-10px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Refined Card Styles */
+.card {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* Refined Button Styles */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--primary-yellow), var(--secondary-yellow));
+    border: none;
+    color: #1f2937;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+}
+
+/* Session Card */
+.session-card {
+    background: linear-gradient(135deg, rgba(255, 247, 178, 0.9), rgba(255, 224, 102, 0.9));
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        2px 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.session-card:nth-child(2n) {
+    background: linear-gradient(135deg, rgba(147, 197, 253, 0.9), rgba(96, 165, 250, 0.9));
+}
+
+.session-card:nth-child(3n) {
+    background: linear-gradient(135deg, rgba(134, 239, 172, 0.9), rgba(74, 222, 128, 0.9));
+}
+
+.session-card:nth-child(4n) {
+    background: linear-gradient(135deg, rgba(252, 165, 165, 0.9), rgba(248, 113, 113, 0.9));
+}
+
+.session-card:nth-child(5n) {
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.9), rgba(167, 139, 250, 0.9));
+}
+
+.session-card:hover {
+    transform: translateY(-2px) rotate(1deg);
+    box-shadow: 
+        0 6px 8px -2px rgba(0, 0, 0, 0.15),
+        3px 3px 6px -1px rgba(0, 0, 0, 0.1);
+    filter: brightness(1.05);
+}
+
+/* Make text more readable on colored backgrounds */
+.session-card h3 {
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+}
+
+.session-card p {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* Question List */
+.question-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+    overflow-y: auto;
+    min-height: 0; /* This is important for grid scroll */
+}
+
+.question-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.question-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.question-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.question-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    height: fit-content; /* Ensure it takes the needed height */
+    min-height: 150px; /* Set a minimum height */
+}
+
+.question-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--primary-blue), var(--secondary-blue));
+    border-radius: 4px;
+}
+
+.question-item:hover {
+    transform: translateY(-2px) translateX(2px);
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Form Controls */
+.form-control {
+    border-radius: 0.375rem;
+    border: 1px solid #e5e7eb;
+    padding: 0.625rem 0.875rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+/* Response Grid */
+.response-list {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    padding: 0.5rem;
+}
+
+.response-item {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.response-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 8px -2px rgba(0, 0, 0, 0.1),
+        0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+/* Response form styling */
+.response-form {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1.5rem;
+}
+
+.response-input {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.response-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Question metadata styling */
+.question-metadata {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.metadata-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.metadata-item i {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+/* Response count badge */
+.response-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-blue);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-radius: 0.75rem;
+    margin: 1rem 0;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #1e293b;
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+/* Add these container utilities after the existing styles */
+.container-narrow {
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.container-slim {
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Make buttons more compact */
+.btn {
+    padding: 0.4rem 0.875rem;
+    font-size: 0.875rem;
+}
+
+/* Add these styles after the existing styles */
+
+/* Main content box */
+.content-box {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+/* Add these modal styles */
+.modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.access-info {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.access-code {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    letter-spacing: 0.1em;
+}
+
+.qr-container {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Add these vibrant styles */
+.participant-view {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7); /* Soft green gradient */
+    overflow-y: auto; /* Add scroll to main container */
+}
+
+.participant-header {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    text-align: center;
+    color: white;
+}
+
+.question-container {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid #3b82f6;
+    transition: all 0.2s ease;
+}
+
+.question-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Update session detail page styles */
+.session-detail {
+    height: calc(100vh - 4rem);
+    padding: 2rem 1rem;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0); /* Cool gray gradient */
+}
+
+.session-header {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Update question list styles */
+.question-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.question-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.question-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #4f46e5, #6366f1);
+}
+
+.question-item:nth-child(2n)::before {
+    background: linear-gradient(to bottom, #2563eb, #3b82f6);
+}
+
+.question-item:nth-child(3n)::before {
+    background: linear-gradient(to bottom, #0d9488, #14b8a6);
+}
+
+.question-item:nth-child(4n)::before {
+    background: linear-gradient(to bottom, #7c3aed, #8b5cf6);
+}
+
+.question-item:hover {
+    transform: translateY(-2px) translateX(2px);
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Response styles */
+.response-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+.response-form textarea {
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    width: 100%;
+    margin: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.response-form textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* Add some fun badges */
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+}
+
+.badge-blue {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+}
+
+.badge-green {
+    background: rgba(13, 148, 136, 0.1);
+    color: #0d9488;
+}
+
+/* Update participant view styles */
+.participant-questions {
+    height: calc(100vh - 16rem); /* Adjust for header and padding */
+    overflow-y: auto;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.participant-questions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.participant-questions::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.participant-questions::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* Add smooth scrolling to html */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure body takes full height */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+}
+
+/* Add these scrollbar styles for all scrollable containers */
+.session-detail::-webkit-scrollbar,
+.participant-view::-webkit-scrollbar,
+.question-list::-webkit-scrollbar,
+.participant-questions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.session-detail::-webkit-scrollbar-track,
+.participant-view::-webkit-scrollbar-track,
+.question-list::-webkit-scrollbar-track,
+.participant-questions::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.session-detail::-webkit-scrollbar-thumb,
+.participant-view::-webkit-scrollbar-thumb,
+.question-list::-webkit-scrollbar-thumb,
+.participant-questions::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* Update dashboard styles */
+.dashboard {
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #f0f7ff, #e0f2fe); /* Soft blue gradient */
+}
+
+/* Update session grid */
+.session-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Container for question list to enable proper scrolling */
+.question-list-container {
+    height: calc(100vh - 24rem);
+    overflow-y: auto;
+    padding: 0.5rem;
+    margin: -0.5rem;  /* Compensate for the padding */
+}
+
+/* Add scrollbar styling for dashboard */
+.dashboard::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dashboard::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dashboard::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* Update responses view styles */
+.responses-view {
+    height: 100vh;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe); /* Soft purple gradient */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.responses-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+/* Update the view's scrollbar styling */
+.responses-view::-webkit-scrollbar {
+    width: 6px;
+}
+
+.responses-view::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.responses-view::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.responses-header {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.9));
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.response-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.response-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+}
+
+.response-card:nth-child(4n+1)::before {
+    background: linear-gradient(to bottom, #f472b6, #ec4899);
+}
+
+.response-card:nth-child(4n+2)::before {
+    background: linear-gradient(to bottom, #34d399, #10b981);
+}
+
+.response-card:nth-child(4n+3)::before {
+    background: linear-gradient(to bottom, #60a5fa, #3b82f6);
+}
+
+.response-card:nth-child(4n+4)::before {
+    background: linear-gradient(to bottom, #a78bfa, #8b5cf6);
+}
+
+.response-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+.response-text {
+    color: #1f2937;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.response-meta {
+    color: #6b7280;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.response-timestamp {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+.responses-stats {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4f46e5;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Add these styles at the end of the file */
+
+/* Markdown and Code Block Styling */
+.markdown-body {
+    color: #24292f !important;
+    background-color: white !important;
+}
+
+.markdown-body pre[class*="language-"],
+.markdown-body code[class*="language-"] {
+    background: #f6f8fa !important;
+    color: #24292f !important;
+    text-shadow: none !important;
+}
+
+/* Override Prism.js token colors for light theme */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6e7781 !important;
+}
+
+.token.punctuation {
+    color: #24292f !important;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #116329 !important;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #0550ae !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #24292f !important;
+    background: transparent !important;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #cf222e !important;
+}
+
+.token.function,
+.token.class-name {
+    color: #8250df !important;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #953800 !important;
+}
+
+/* Ensure code blocks have proper padding and borders */
+pre[class*="language-"] {
+    background: #f6f8fa !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 6px !important;
+    margin: 1em 0 !important;
+    padding: 1em !important;
+}
+
+/* Inline code styling */
+:not(pre) > code {
+    background: rgba(175, 184, 193, 0.2) !important;
+    color: #24292f !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 6px !important;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace !important;
+}
+
+/* Ensure all text in markdown is properly colored */
+.markdown-body * {
+    color: #24292f !important;
+    background-color: transparent !important;
+}
+
+/* Specific overrides for markdown elements */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.markdown-body p,
+.markdown-body li,
+.markdown-body ul,
+.markdown-body ol {
+    color: #24292f !important;
+}
+
+/* Table styling */
+.markdown-body table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+    border: 1px solid #d0d7de !important;
+    padding: 6px 13px !important;
+    background: white !important;
+    color: #24292f !important;
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background: #f6f8fa !important;
+} 

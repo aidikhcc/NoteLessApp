@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Join Session{% endblock %}
+
+{% block content %}
+<div class="participant-view">
+    <div class="container-narrow">
+        <div class="participant-header">
+            <h1 class="text-3xl font-bold mb-2">{{ session.name }}</h1>
+            <p class="text-lg opacity-90">Share your responses to the questions below</p>
+        </div>
+
+        <div class="participant-questions">
+            {% for question in session.questions %}
+            <div class="question-container animate-fade-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                <h3 class="text-xl font-semibold mb-4">{{ question.text }}</h3>
+                
+                <form class="response-form" data-question-id="{{ question.id }}">
+                    <textarea class="response-input" 
+                              rows="3" 
+                              placeholder="Type your response here..."
+                              required></textarea>
+                    <button type="submit" class="btn btn-primary w-full">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Submit Response
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-comments"></i>
+                <h3>No Questions Yet</h3>
+                <p>The session owner hasn't added any questions yet. Check back soon!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 
